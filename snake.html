@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贪吃蛇游戏</title>
+    <!-- 游戏样式 - 使用CSS美化界面 -->
+    <style>
+        /* 全局样式 - 居中显示游戏界面 */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000000;
+            font-family: Arial, sans-serif;
+        }
+        /* 游戏标题样式 */
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px #4CAF50;
+        }
+        /* 游戏容器样式 - 相对定位用于放置分数和游戏结束界面 */
+        #game-container {
+            position: relative;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+            border-radius: 5px;
+        }
+        /* 游戏画布样式 */
+        #game-canvas {
+            border: 2px solid #333;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+        /* 分数显示样式 - 绝对定位在游戏画布左上角 */
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+        /* 游戏结束界面样式 - 居中显示在游戏画布上 */
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        /* 重新开始按钮样式 */
+        #restart-btn {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        /* 重新开始按钮悬停效果 */
+        #restart-btn:hover {
+            background-color: #45a049;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        /* 游戏说明样式 */
+        #instructions {
+            margin-top: 20px;
+            text-align: center;
+            color: #aaa;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 游戏标题 -->
+    <h1>贪吃蛇游戏</h1>
+    
+    <!-- 游戏主容器 -->
+    <div id="game-container">
+        <!-- 游戏画布 - 实际游戏渲染区域 -->
+        <canvas id="game-canvas" width="600" height="600"></canvas>
+        
+        <!-- 分数显示区域 -->
+        <div id="score">分数: 0</div>
+        
+        <!-- 游戏结束界面 - 默认隐藏 -->
+        <div id="game-over">
+            <h2>游戏结束!</h2>
+            <p id="final-score">最终分数: 0</p>
+            <button id="restart-btn">重新开始</button>
+        </div>
+    </div>
+    
+    <!-- 游戏操作说明 -->
+    <div id="instructions">
+        <p>使用方向键 ↑ ↓ ← → 控制蛇的移动</p>
+        <p>吃到食物可以增加分数和蛇的长度，注意避开墙壁和自己的身体</p>
+        <p>当吃完所有食物后，会进入新的关卡，墙壁布局会发生变化</p>
+    </div>
+
+    <!-- 引入游戏逻辑脚本 -->
+    <script src="snake.js"></script>
+</body>
+</html>
