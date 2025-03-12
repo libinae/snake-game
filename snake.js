@@ -13,9 +13,10 @@ const scoreElement = document.getElementById('score');
 const gameOverElement = document.getElementById('game-over');
 const finalScoreElement = document.getElementById('final-score');
 const restartButton = document.getElementById('restart-btn');
+const pauseButton = document.getElementById('pause-btn');
 
 // 游戏基本配置
-const gridSize = 20; // 网格大小，单位像素
+const gridSize = 40; // 网格大小，单位像素
 const tileCount = canvas.width / gridSize; // 网格数量
 
 // 游戏状态变量
@@ -29,6 +30,7 @@ let dy = 0; // 垂直移动方向
 let score = 0; // 分数
 let gameLoop; // 游戏循环计时器
 let isGeneratingNewMaze = false; // 是否正在生成新迷宫的标志
+let isPaused = false; // 游戏暂停状态
 
 /**
  * 游戏主循环函数
@@ -224,6 +226,11 @@ function generateSingleWall() {
  * 处理蛇的移动、食物的吃取和关卡进阶
  */
 function moveSnake() {
+    // 如果游戏暂停，不执行移动逻辑
+    if (isPaused) {
+        return;
+    }
+    
     // 根据当前方向创建新的蛇头
     const head = { x: snake[0].x + dx, y: snake[0].y + dy };
     // 将新蛇头添加到蛇身体的前端
@@ -348,6 +355,9 @@ function resetGame() {
     dx = 0;
     dy = 0;
     score = 0;
+    isPaused = false; // 重置暂停状态
+    pauseButton.textContent = '暂停'; // 重置暂停按钮文本
+    // 不再重置暂停按钮的背景颜色
     gameOverElement.style.display = 'none';
     generateMaze(); // 生成迷宫
     generateFood(); // 生成初始食物
@@ -366,6 +376,17 @@ function handleKeyPress(e) {
     // 检测R键重启游戏
     if (key === 'r' || key === 'R') {
         resetGame();
+        return;
+    }
+    
+    // 检测空格键暂停/继续游戏
+    if (key === ' ') {
+        togglePause();
+        return;
+    }
+    
+    // 如果游戏暂停，不处理方向键
+    if (isPaused) {
         return;
     }
     
@@ -397,9 +418,20 @@ function startGame() {
     gameLoop = setInterval(drawGame, 200);
 }
 
+/**
+ * 切换游戏暂停状态
+ * 更新暂停按钮文本和背景颜色
+ */
+function togglePause() {
+    isPaused = !isPaused;
+    pauseButton.textContent = isPaused ? '继续' : '暂停';
+    pauseButton.style.backgroundColor = isPaused ? 'rgba(255, 0, 0, 0.3)' : 'rgba(76, 175, 80, 0.3)';
+}
+
 // 设置事件监听器
 document.addEventListener('keydown', handleKeyPress);
 restartButton.addEventListener('click', resetGame);
+pauseButton.addEventListener('click', togglePause);
 
 // 初始化游戏
 generateMaze(); // 首次生成迷宫
